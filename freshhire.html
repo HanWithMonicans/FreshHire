@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshHire - Empowering Graduates</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Existing styles... */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e0f7fa; /* Light blue color */
+            color: #333;
+            background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/pw_maze.png'); /* Subtle pattern */
+        }
+        header {
+            background: #007BFF; /* Blue color */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid #0056b3;
+            border-radius: 0 0 12px 12px; /* Rounded bottom corners */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1, h2 {
+            font-family: 'Lobster', cursive; /* Fancy font for headings */
+        }
+        section {
+            padding: 20px;
+            margin: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: #333;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            border-radius: 12px; /* Rounded corners for footer */
+        }
+        button {
+            padding: 10px 20px;
+            background: #007BFF; /* Blue color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-family: 'Roboto', sans-serif; /* Keep button font consistent */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background: #0056b3; /* Darker blue */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0); /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Form styles */
+        .form-container {
+            text-align: center;
+            margin: 20px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            margin: 10px 0;
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to FreshHire</h1>
+    <img src="https://via.placeholder.com/100" alt="FreshHire Icon" class="graduation-icon"> <!-- Your icon added here -->
+    <p>Connecting Graduates with Opportunities</p>
+    <button id="loginBtn">Login</button>
+    <button id="signupBtn">Sign Up</button>
+</header>
+
+<section>
+    <h2>About FreshHire</h2>
+    <p>Designed for ease of use, allowing graduates to upload resumes and profiles quickly, and enabling employers to navigate and find candidates effortlessly. Filter candidates based on specific skills, education, and interests, ensuring they find the right fit for their organization.</p>
+</section>
+
+<section>
+    <h2>Profile Setup</h2>
+    <div class="form-container">
+        <input type="file" id="profilePic" accept="image/*" onchange="previewImage(event)">
+        <input type="text" id="userName" placeholder="Enter your name">
+        <input type="email" id="userEmail" placeholder="Enter your email">
+        <input type="text" id="userSkills" placeholder="Enter your skills (comma separated)">
+        <button onclick="addCandidate()">Submit</button>
+        <img id="imagePreview" alt="Profile Picture">
+        <h3 id="profileDisplay" style="display:none;"></h3>
+    </div>
+</section>
+
+<section>
+    <h2>Filters</h2>
+    <div class="filters">
+        <select id="skillFilter" onchange="filterCandidates()">
+            <option value="">Filter by Skill</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="Python">Python</option>
+            <option value="Design">Design</option>
+        </select>
+        <select id="educationFilter" onchange="filterCandidates()">
+            <option value="">Filter by Education</option>
+            <option value="Bachelor's">Bachelor's</option>
+            <option value="Master's">Master's</option>
+        </select>
+    </div>
+    <div class="candidate-list" id="candidateList"></div>
+</section>
+
+<section>
+    <h2>Get Started</h2>
+    <p>Download the FreshHire app today and take the first step towards your dream job!</p>
+    <button onclick="alert('Thank you for your interest!')">Download Now</button>
+</section>
+
+<footer>
+    <p>&copy; 2024 FreshHire. All rights reserved.</p>
+</footer>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeLogin">&times;</span>
+        <h2>Login</h2>
+        <form>
+            <input type="email" id="loginEmail" placeholder="Enter your email" required>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div id="signupModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeSignup">&times;</span>
+        <h2>Sign Up</h2>
+        <form>
+            <input type="text" id="signupName" placeholder="Enter your name" required>
+            <input type="email" id="signupEmail" placeholder="Enter your email" required>
+            <input type="password" id="signupPassword" placeholder="Enter your password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const candidates = [];
+
+    function previewImage(event) {
+        const image = document.getElementById('imagePreview');
+        image.src = URL.createObjectURL(event.target.files[0]);
+        image.style.display = 'block'; // Show the image
+    }
+
+    function addCandidate() {
+        const name = document.getElementById('userName').value;
+        const email = document.getElementById('userEmail').value;
+        const skills = document.getElementById('userSkills').value.split(',').map(skill => skill.trim());
+        const profilePic = document.getElementById('imagePreview').src;
+
+        const candidate = { name, email, skills, profilePic };
+        candidates.push(candidate);
+        displayCandidates();
+        clearForm();
+    }
+
+    function displayCandidates() {
+        const candidateList = document.getElementById('candidateList');
+        candidateList.innerHTML = '';
+        candidates.forEach(candidate => {
+            const candidateDiv = document.createElement('div');
+            candidateDiv.className = 'candidate';
+            candidateDiv.innerHTML = `
+                <img src="${candidate.profilePic}" alt="Profile Picture" style="width:50px; height:50px;">
+                <strong>${candidate.name}</strong><br>
+                <span>${candidate.email}</span><br>
+                <span>Skills: ${candidate.skills.join(', ')}</span>
+            `;
+            candidateList.appendChild(candidateDiv);
+        });
+    }
+
+    function filterCandidates() {
+        const skillFilter = document.getElementById('skillFilter').value.toLowerCase();
+        const educationFilter = document.getElementById('educationFilter').value.toLowerCase();
+
+        const filteredCandidates = candidates.filter(candidate => {
+            const hasSkill = skillFilter ? candidate.skills.some(skill => skill.toLowerCase().includes(skillFilter)) : true;
+            // Education filter is not implemented; you can add an education property to candidates if needed.
+            return hasSkill; // Add education logic as needed
+        });
+
+        const candidateList = document.getElementById('candidateList');
+        candidateList.innerHTML = '';
+        filteredCandidates.forEach(candidate => {
+            const candidateDiv = document.createElement('div');
+            candidateDiv.className = 'candidate';
+            candidateDiv.innerHTML = `
+                <img src="${candidate.profilePic}" alt="Profile Picture" style="width:50px; height:50px;">
+                <strong>${candidate.name}</strong><br>
+                <span>${candidate.email}</span><br>
+                <span>Skills: ${candidate.skills.join(', ')}</span>
+            `;
+            candidateList.appendChild(candidateDiv);
+        });
+    }
+
+    function clearForm() {
+        document.getElementById('userName').value = '';
+        document.getElementById('userEmail').value = '';
+        document.getElementById('userSkills').value = '';
+        document.getElementById('imagePreview').src = '';
+        document.getElementById('imagePreview').style.display = 'none';
+    }
+
+    // Modal functionality
+    const loginModal = document.getElementById("loginModal");
+    const signupModal = document.getElementById("signupModal");
+
+    document.getElementById("loginBtn").onclick = function() {
+        loginModal.style.display = "block";
+    }
+
+    document.getElementById("signupBtn").onclick = function() {
+        signupModal.style.display = "block";
+    }
+
+    document.getElementById("closeLogin").onclick = function() {
+        loginModal.style.display = "none";
+    }
+
+    document.getElementById("closeSignup").onclick = function() {
+        signupModal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == loginModal) {
+            loginModal.style.display = "none";
+        }
+        if (event.target == signupModal) {
+            signupModal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
